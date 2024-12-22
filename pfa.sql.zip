@@ -1,0 +1,274 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Hôte : 127.0.0.1
+-- Généré le : lun. 20 mai 2024 à 15:28
+-- Version du serveur : 10.4.32-MariaDB
+-- Version de PHP : 8.2.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Base de données : `pfa`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `candidature`
+--
+
+CREATE TABLE `candidature` (
+  `ID_candidature` int(11) NOT NULL,
+  `ID_chercheur` int(11) DEFAULT NULL,
+  `ID_offre` int(11) DEFAULT NULL,
+  `Statut` enum('En cours','Accepté','Rejeté') NOT NULL,
+  `Date_soumission` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `chercheuremploi`
+--
+
+CREATE TABLE `chercheuremploi` (
+  `ID_chercheur` int(11) NOT NULL,
+  `Nom` varchar(50) NOT NULL,
+  `Prenom` varchar(50) NOT NULL,
+  `Adresse` varchar(100) DEFAULT NULL,
+  `Numero_Tel` varchar(15) DEFAULT NULL,
+  `Email` varchar(100) NOT NULL,
+  `Password` varchar(50) NOT NULL
+) ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `chercheur_specialite`
+--
+
+CREATE TABLE `chercheur_specialite` (
+  `ID_chercheur` int(11) NOT NULL,
+  `ID_specialite` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `cv`
+--
+
+CREATE TABLE `cv` (
+  `ID_cv` int(11) NOT NULL,
+  `ID_chercheur` int(11) DEFAULT NULL,
+  `Titre` varchar(100) DEFAULT NULL,
+  `Date_creation` date DEFAULT NULL,
+  `CV_filepath` varchar(255) DEFAULT NULL,
+  `Description` text DEFAULT NULL,
+  `Competences` text DEFAULT NULL,
+  `Experience` text DEFAULT NULL,
+  `Formation` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `entreprise`
+--
+
+CREATE TABLE `entreprise` (
+  `ID_entreprise` int(11) NOT NULL,
+  `Nom` varchar(100) NOT NULL,
+  `Email` varchar(100) NOT NULL,
+  `Numero_Tel` varchar(15) DEFAULT NULL,
+  `Secteur_activite` varchar(100) DEFAULT NULL,
+  `Raison_sociale` varchar(100) DEFAULT NULL,
+  `Password` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `entreprise_specialite`
+--
+
+CREATE TABLE `entreprise_specialite` (
+  `ID_entreprise` int(11) NOT NULL,
+  `ID_specialite` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `offre_emploi`
+--
+
+CREATE TABLE `offre_emploi` (
+  `ID_offre` int(11) NOT NULL,
+  `Titre` varchar(100) NOT NULL,
+  `Date_Publication` date DEFAULT NULL,
+  `ID_entreprise` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `specialite`
+--
+
+CREATE TABLE `specialite` (
+  `ID_specialite` int(11) NOT NULL,
+  `Nom` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Index pour les tables déchargées
+--
+
+--
+-- Index pour la table `candidature`
+--
+ALTER TABLE `candidature`
+  ADD PRIMARY KEY (`ID_candidature`),
+  ADD KEY `ID_chercheur` (`ID_chercheur`),
+  ADD KEY `ID_offre` (`ID_offre`);
+
+--
+-- Index pour la table `chercheuremploi`
+--
+ALTER TABLE `chercheuremploi`
+  ADD PRIMARY KEY (`ID_chercheur`),
+  ADD UNIQUE KEY `Email` (`Email`);
+
+--
+-- Index pour la table `chercheur_specialite`
+--
+ALTER TABLE `chercheur_specialite`
+  ADD PRIMARY KEY (`ID_chercheur`,`ID_specialite`),
+  ADD KEY `ID_specialite` (`ID_specialite`);
+
+--
+-- Index pour la table `cv`
+--
+ALTER TABLE `cv`
+  ADD PRIMARY KEY (`ID_cv`),
+  ADD KEY `ID_chercheur` (`ID_chercheur`);
+
+--
+-- Index pour la table `entreprise`
+--
+ALTER TABLE `entreprise`
+  ADD PRIMARY KEY (`ID_entreprise`),
+  ADD UNIQUE KEY `Email` (`Email`);
+
+--
+-- Index pour la table `entreprise_specialite`
+--
+ALTER TABLE `entreprise_specialite`
+  ADD PRIMARY KEY (`ID_entreprise`,`ID_specialite`),
+  ADD KEY `ID_specialite` (`ID_specialite`);
+
+--
+-- Index pour la table `offre_emploi`
+--
+ALTER TABLE `offre_emploi`
+  ADD PRIMARY KEY (`ID_offre`),
+  ADD KEY `ID_entreprise` (`ID_entreprise`);
+
+--
+-- Index pour la table `specialite`
+--
+ALTER TABLE `specialite`
+  ADD PRIMARY KEY (`ID_specialite`);
+
+--
+-- AUTO_INCREMENT pour les tables déchargées
+--
+
+--
+-- AUTO_INCREMENT pour la table `candidature`
+--
+ALTER TABLE `candidature`
+  MODIFY `ID_candidature` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `chercheuremploi`
+--
+ALTER TABLE `chercheuremploi`
+  MODIFY `ID_chercheur` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `cv`
+--
+ALTER TABLE `cv`
+  MODIFY `ID_cv` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `entreprise`
+--
+ALTER TABLE `entreprise`
+  MODIFY `ID_entreprise` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `offre_emploi`
+--
+ALTER TABLE `offre_emploi`
+  MODIFY `ID_offre` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `specialite`
+--
+ALTER TABLE `specialite`
+  MODIFY `ID_specialite` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Contraintes pour les tables déchargées
+--
+
+--
+-- Contraintes pour la table `candidature`
+--
+ALTER TABLE `candidature`
+  ADD CONSTRAINT `candidature_ibfk_1` FOREIGN KEY (`ID_chercheur`) REFERENCES `chercheuremploi` (`ID_chercheur`),
+  ADD CONSTRAINT `candidature_ibfk_2` FOREIGN KEY (`ID_offre`) REFERENCES `offre_emploi` (`ID_offre`);
+
+--
+-- Contraintes pour la table `chercheur_specialite`
+--
+ALTER TABLE `chercheur_specialite`
+  ADD CONSTRAINT `chercheur_specialite_ibfk_1` FOREIGN KEY (`ID_chercheur`) REFERENCES `chercheuremploi` (`ID_chercheur`),
+  ADD CONSTRAINT `chercheur_specialite_ibfk_2` FOREIGN KEY (`ID_specialite`) REFERENCES `specialite` (`ID_specialite`);
+
+--
+-- Contraintes pour la table `cv`
+--
+ALTER TABLE `cv`
+  ADD CONSTRAINT `cv_ibfk_1` FOREIGN KEY (`ID_chercheur`) REFERENCES `chercheuremploi` (`ID_chercheur`);
+
+--
+-- Contraintes pour la table `entreprise_specialite`
+--
+ALTER TABLE `entreprise_specialite`
+  ADD CONSTRAINT `entreprise_specialite_ibfk_1` FOREIGN KEY (`ID_entreprise`) REFERENCES `entreprise` (`ID_entreprise`),
+  ADD CONSTRAINT `entreprise_specialite_ibfk_2` FOREIGN KEY (`ID_specialite`) REFERENCES `specialite` (`ID_specialite`);
+
+--
+-- Contraintes pour la table `offre_emploi`
+--
+ALTER TABLE `offre_emploi`
+  ADD CONSTRAINT `offre_emploi_ibfk_1` FOREIGN KEY (`ID_entreprise`) REFERENCES `entreprise` (`ID_entreprise`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
