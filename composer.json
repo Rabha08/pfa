@@ -1,0 +1,7 @@
+{
+    "name": "rabha/pfa",
+    "description": "mediateur_d'emploi",
+    "require": {
+        "php": "^7.4 || ^8.0"
+    }
+}
