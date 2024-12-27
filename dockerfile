@@ -1,17 +1,19 @@
-# Étape 1 : Utiliser une image de base officielle avec PHP et Apache
-FROM php:8.1-apache
+# image de base PHP
+FROM php:7.4-cli
 
-# Étape 2 : Installer les extensions PHP nécessaires
-RUN docker-php-ext-install pdo pdo_mysql
+#  répertoire de travail
+WORKDIR /app
 
-# Étape 3 : Copier les fichiers de l'application dans le conteneur
-COPY . /var/www/html
+# Copie des fichiers du projet dans le conteneur
+COPY . /app
 
-# Étape 4 : Assurer les permissions correctes
-RUN chown -R www-data:www-data /var/www/html
+# Installation des dépendances avec Composer
+RUN curl -sS https://getcomposer.org/installer | php && \
+    mv composer.phar /usr/local/bin/composer && \
+    composer install
 
-# Étape 5 : Exposer le port 80
+# Exposer le port 80
 EXPOSE 80
 
-# Étape 6 : Lancer Apache en mode premier plan
-CMD ["apache2-foreground"]
+# Commande pour démarrer l'application
+CMD ["php", "-S", "0.0.0.0:80", "-t", "public"]
